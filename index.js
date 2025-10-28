@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const fs = require("fs").promises;
+const { readFileAsync } = require("./helpers/createPath");
 const app = express();
 
 app.get("/", (req, res) => {
@@ -11,10 +11,7 @@ app.get("/", (req, res) => {
 app.get("/api/users", async (req, res) => {
   const { name, age } = req.query;
 
-  const data = await fs.readFile(
-    path.join(__dirname, "db", "users.json"),
-    "utf8"
-  );
+  const data = await readFileAsync("db", "users.json");
 
   let users = JSON.parse(data);
 
@@ -43,10 +40,7 @@ app.get("/api/users", async (req, res) => {
 });
 app.get("/api/users/:id", async (req, res) => {
   const { id } = req.params;
-  const data = await fs.readFile(
-    path.join(__dirname, "db", "users.json"),
-    "utf8"
-  );
+  const data = await readFileAsync("db", "users.json");
   const users = JSON.parse(data);
 
   const user = users.find((u) => u.id === +id);
